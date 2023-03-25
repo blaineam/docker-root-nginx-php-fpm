@@ -11,7 +11,7 @@ MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-w
 
 ENV PHP_VERSION 8.2.3
 ENV ONIGURAMA_VERSION=6.9.8
-ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=app --with-fpm-group=app
+ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=root --with-fpm-group=root
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_BUILD_DEPS bzip2 \
 		file \
@@ -98,13 +98,8 @@ RUN gpg --keyserver keyserver.ubuntu.com --recv-keys \
 	&& curl -sS https://getcomposer.org/installer | php \
 	&& ln -s /opt/composer.phar /usr/local/bin/composer
 
-RUN groupadd -r app -g 433 && \
-	mkdir /home/app && \
-	mkdir -p /var/wwwroot/default && \
-	useradd -u 431 -r -g app -d /home/app -s /usr/sbin/nologin -c "Docker image user for web application" app && \
-	chown -R app:app /home/app /var/wwwroot/default && \
-	chmod 700 /home/app && \
-	chmod 711 /var/wwwroot/default
+RUN mkdir -p /var/wwwroot/default
+
 
 COPY files / 
 
